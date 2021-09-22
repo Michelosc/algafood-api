@@ -1,5 +1,6 @@
 package com.algaworks.algafoodapi.api.controller;
 
+import com.algaworks.algafoodapi.api.assembler.RestauranteInputDisassembler;
 import com.algaworks.algafoodapi.api.assembler.RestauranteModelAssembler;
 import com.algaworks.algafoodapi.api.model.RestauranteModel;
 import com.algaworks.algafoodapi.api.model.input.RestauranteInput;
@@ -42,6 +43,9 @@ public class RestauranteController {
     @Autowired
     private SmartValidator validator;
 
+    @Autowired
+    private RestauranteInputDisassembler restauranteInputDisassembler;
+
     @GetMapping
     public List<RestauranteModel> listar() {
         return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
@@ -62,7 +66,7 @@ public class RestauranteController {
     public RestauranteModel adicionar(
             @RequestBody @Valid RestauranteInput restauranteInput) {
         try {
-            Restaurante restaurante = toDomainObject(restauranteInput);
+            Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
             return restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restaurante));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
@@ -72,7 +76,7 @@ public class RestauranteController {
 
     @PutMapping("/{restauranteId}")
     public RestauranteModel atualizar(@PathVariable Long restauranteId, @RequestBody @Valid RestauranteInput restauranteInput) {
-        Restaurante restaurante = toDomainObject(restauranteInput);
+        Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
         Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
         BeanUtils.copyProperties(restaurante, restauranteAtual,
@@ -85,20 +89,6 @@ public class RestauranteController {
         }
 
     }
-
-    private Restaurante toDomainObject(RestauranteInput restauranteInput) {
-        Restaurante restaurante = new Restaurante();
-        restaurante.setNome(restauranteInput.getNome());
-        restaurante.setTaxaFrete(restauranteInput.getTaxaFrete());
-
-        Cozinha cozinha = new Cozinha();
-        cozinha.setId(restauranteInput.getCozinhaIdInput().getId());
-
-        restaurante.setCozinha(cozinha);
-
-        return restaurante;
-    }
-
 
     private void validate(Restaurante restaurante, String objectName) {
         BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
