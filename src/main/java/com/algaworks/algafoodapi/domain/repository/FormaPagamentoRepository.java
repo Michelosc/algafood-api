@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface FormaPagamenroRepository extends JpaRepository<FormaPagamento, Long> {
+public interface FormaPagamentoRepository extends JpaRepository<FormaPagamento, Long> {
 
 }
