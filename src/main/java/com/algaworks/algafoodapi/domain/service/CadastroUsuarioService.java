@@ -2,6 +2,7 @@ package com.algaworks.algafoodapi.domain.service;
 
 import com.algaworks.algafoodapi.domain.exception.NegocioException;
 import com.algaworks.algafoodapi.domain.exception.UsuarioNaoEncontradoException;
+import com.algaworks.algafoodapi.domain.model.Grupo;
 import com.algaworks.algafoodapi.domain.model.Usuario;
 import com.algaworks.algafoodapi.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ public class CadastroUsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private CadastroGrupoService cadastroGrupo;
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
@@ -37,6 +41,22 @@ public class CadastroUsuarioService {
             throw new NegocioException("Senha atual informada não coincide com a senha do usuário.");
         }
         usuario.setSenha(novaSenha);
+    }
+
+    @Transactional
+    public void desassociarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+        Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
+
+        usuario.removerGrupo(grupo);
+    }
+
+    @Transactional
+    public void associarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+        Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
+
+        usuario.adicionarGrupo(grupo);
     }
 
     public Usuario buscarOuFalhar(Long usuarioId) {
