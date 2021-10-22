@@ -1,7 +1,7 @@
 package com.algaworks.algafoodapi.api.controller;
 
 import com.algaworks.algafoodapi.api.assembler.PermissaoModelAssembler;
-import com.algaworks.algafoodapi.api.model.mixin.PermissaoModel;
+import com.algaworks.algafoodapi.api.model.PermissaoModel;
 import com.algaworks.algafoodapi.domain.model.Grupo;
 import com.algaworks.algafoodapi.domain.service.CadastroGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
