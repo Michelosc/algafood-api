@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-@JsonFilter("pedidoFilter")
 @Getter
 @Setter
 public class PedidoResumoModel {
