@@ -6,6 +6,7 @@ import com.algaworks.algafoodapi.api.assembler.PedidoResumoModelAssembler;
 import com.algaworks.algafoodapi.api.model.PedidoModel;
 import com.algaworks.algafoodapi.api.model.PedidoResumoModel;
 import com.algaworks.algafoodapi.api.model.input.PedidoInput;
+import com.algaworks.algafoodapi.core.data.PageableTranslator;
 import com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafoodapi.domain.exception.NegocioException;
 import com.algaworks.algafoodapi.domain.model.Pedido;
@@ -16,6 +17,7 @@ import com.algaworks.algafoodapi.domain.service.EmissaoPedidoService;
 import com.algaworks.algafoodapi.infrastructure.repository.spec.PedidoSpecs;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -70,6 +73,9 @@ public class PedidoController {
 
     @GetMapping
     public Page<PedidoResumoModel> pesquisar(@PageableDefault(size = 10) PedidoFilter filtro, Pageable pageable) {
+
+        pageable = traduzirPageable(pageable);
+
         Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
 
         List<PedidoResumoModel> pedidosResumoModel = pedidoResumoModelAssembler
@@ -102,6 +108,21 @@ public class PedidoController {
         } catch (EntidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
+    }
+
+    private Pageable traduzirPageable(Pageable pageable) {
+        var mapeamento = Map.of(
+                "codigo", "codigo",
+                "subtotal", "subtotal",
+                "taxaFrete", "taxaFrete",
+                "valorTotal","valorTotal",
+                "dataCriacao", "dataCriacao",
+                "restaurante.nome", "restaurante.nome",
+                "cliente.id", "cliente.id",
+                "cliente.nome", "cliente.nome"
+        );
+
+        return PageableTranslator.translate(pageable, mapeamento);
     }
 
 }
