@@ -48,7 +48,7 @@ public class RestauranteProdutoFotoController {
     @GetMapping
     public ResponseEntity<InputStreamResource> servirFoto(
             @PathVariable Long restauranteId, @PathVariable Long produtoId,
-            @RequestHeader(name = "accept") String acceptHeader) {
+            @RequestHeader(name = "accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException{
         try {
             FotoProduto fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
 
@@ -62,7 +62,7 @@ public class RestauranteProdutoFotoController {
             return ResponseEntity.ok()
                     .contentType(mediaTypeFoto)
                     .body(new InputStreamResource(inputStream));
-        } catch (EntidadeNaoEncontradaException | HttpMediaTypeNotAcceptableException e) {
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build();
         }
 
