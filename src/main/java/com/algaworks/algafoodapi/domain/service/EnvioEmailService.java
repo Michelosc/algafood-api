@@ -2,7 +2,9 @@ package com.algaworks.algafoodapi.domain.service;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.stereotype.Service;
+import lombok.NonNull;
+import lombok.Singular;
+
 
 import java.util.Set;
 
@@ -14,8 +16,13 @@ public interface EnvioEmailService {
     @Builder
     class Mensagem {
 
-        private Set<String> detinataraios;
+        @Singular
+        private Set<String> detinatarios;
+
+        @NonNull
         private String assunto;
+
+        @NonNull
         private String corpo;
     }
 }
