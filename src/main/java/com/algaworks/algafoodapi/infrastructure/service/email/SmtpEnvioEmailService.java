@@ -7,7 +7,6 @@ import freemarker.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import javax.mail.MessagingException;
@@ -43,7 +42,7 @@ public class SmtpEnvioEmailService implements EnvioEmailService {
 
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
         helper.setFrom(emailProperties.getRemetente());
-        helper.setTo(mensagem.getDetinatarios().toArray(new String[0]));
+        helper.setTo(mensagem.getDestinatarios().toArray(new String[0]));
         helper.setSubject(mensagem.getAssunto());
         helper.setText(corpo, true);
 
