@@ -1,5 +1,6 @@
 package com.algaworks.algafoodapi.domain.model;
 
+import com.algaworks.algafoodapi.domain.event.PedidoCanceladoEvent;
 import com.algaworks.algafoodapi.domain.event.PedidoConfirmadoEvent;
 import com.algaworks.algafoodapi.domain.exception.NegocioException;
 import lombok.Data;
@@ -84,6 +85,8 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
     public void cancelar() {
         setStatus(StatusPedido.CANCELADO);
         setDataCancelamento(OffsetDateTime.now());
+
+        registerEvent(new PedidoCanceladoEvent(this));
     }
 
     private void setStatus(StatusPedido novoStatus) {
