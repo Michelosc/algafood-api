@@ -11,6 +11,7 @@ import com.algaworks.algafoodapi.domain.repository.CidadeRepository;
 import com.algaworks.algafoodapi.domain.service.CadastroCidadeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,7 +48,9 @@ public class CidadeController {
 
     @ApiOperation("Busca uma cidade por ID")
     @GetMapping("/{cidadeId}")
-    public CidadeModel buscar(@PathVariable Long cidadeId) {
+    public CidadeModel buscar(
+            @ApiParam(value = "ID de uma cidade", example = "1")
+            @PathVariable Long cidadeId) {
 
         Cidade cidade = cadastroCidade.buscarOuFalhar(cidadeId);
 
@@ -57,7 +60,8 @@ public class CidadeController {
     @ApiOperation("Cadastra uma cidade")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CidadeModel adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
+    public CidadeModel adicionar(
+            @RequestBody @Valid CidadeInput cidadeInput) {
         try {
             Cidade cidade = cidadeInputDisassembler.toDomainObject(cidadeInput);
             cidade = cadastroCidade.salvar(cidade);
@@ -70,7 +74,10 @@ public class CidadeController {
 
     @ApiOperation("Atualiza uma cidade por ID")
     @PutMapping("/{cidadeId}")
-    public CidadeModel atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInput cidadeInput) {
+    public CidadeModel atualizar(
+            @ApiParam(value = "ID de uma cidade", example = "1")
+            @PathVariable Long cidadeId,
+            @RequestBody @Valid CidadeInput cidadeInput) {
         try {
             Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
 
@@ -86,7 +93,9 @@ public class CidadeController {
     @ApiOperation("Exclui uma cidade por ID")
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@PathVariable Long cidadeId) {
+    public void remover(
+            @ApiParam(value = "ID de uma cidade", example = "1")
+            @PathVariable Long cidadeId) {
         cadastroCidade.excluir(cidadeId);
     }
 
