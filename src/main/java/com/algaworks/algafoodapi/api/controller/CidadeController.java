@@ -2,6 +2,7 @@ package com.algaworks.algafoodapi.api.controller;
 
 import com.algaworks.algafoodapi.api.assembler.CidadeInputDisassembler;
 import com.algaworks.algafoodapi.api.assembler.CidadeModelAssembler;
+import com.algaworks.algafoodapi.api.controller.openApi.CidadeControllerOpenApi;
 import com.algaworks.algafoodapi.api.exceptionhandler.Problem;
 import com.algaworks.algafoodapi.api.model.CidadeModel;
 import com.algaworks.algafoodapi.api.model.input.CidadeInput;
@@ -27,7 +28,7 @@ import java.util.List;
 @Api(tags = "Cidades")
 @RestController
 @RequestMapping("/cidades")
-public class CidadeController {
+public class CidadeController implements CidadeControllerOpenApi {
 
     @Autowired
     private CidadeModelAssembler cidadeModelAssembler;
@@ -41,7 +42,6 @@ public class CidadeController {
     @Autowired
     private CadastroCidadeService cadastroCidade;
 
-    @ApiOperation("Lista as cidades")
     @GetMapping
     public List<CidadeModel> listar() {
         List<Cidade> todasCidades = cidadeRepository.findAll();
@@ -49,14 +49,8 @@ public class CidadeController {
         return cidadeModelAssembler.toCollectionModel(todasCidades);
     }
 
-    @ApiOperation("Busca uma cidade por ID")
-    @ApiResponses({
-            @ApiResponse(responseCode = "400", description = "ID de uma cidade", content = @Content(schema = @Schema(implementation = Problem.class))),
-            @ApiResponse(responseCode = "404", description = "Cidade não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
-    })
     @GetMapping("/{cidadeId}")
     public CidadeModel buscar(
-            @ApiParam(value = "ID de uma cidade", example = "1")
             @PathVariable Long cidadeId) {
 
         Cidade cidade = cadastroCidade.buscarOuFalhar(cidadeId);
@@ -64,10 +58,6 @@ public class CidadeController {
         return cidadeModelAssembler.toModel(cidade);
     }
 
-    @ApiOperation("Cadastra uma cidade")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Cidade cadastrada")
-    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeModel adicionar(
@@ -82,14 +72,8 @@ public class CidadeController {
         }
     }
 
-    @ApiOperation("Atualiza uma cidade por ID")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Cidade atualizada"),
-            @ApiResponse(responseCode = "404", description = "Cidade não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
-    })
     @PutMapping("/{cidadeId}")
     public CidadeModel atualizar(
-            @ApiParam(value = "ID de uma cidade", example = "1")
             @PathVariable Long cidadeId,
             @RequestBody @Valid CidadeInput cidadeInput) {
         try {
@@ -104,16 +88,9 @@ public class CidadeController {
         }
     }
 
-    @ApiOperation("Exclui uma cidade por ID")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Cidade excluída"),
-            @ApiResponse(responseCode = "404", description = "Cidade não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
-    })
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(
-            @ApiParam(value = "ID de uma cidade", example = "1")
-            @PathVariable Long cidadeId) {
+    public void remover(@PathVariable Long cidadeId) {
         cadastroCidade.excluir(cidadeId);
     }
 
