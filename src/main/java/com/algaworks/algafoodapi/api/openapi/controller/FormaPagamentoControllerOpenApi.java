@@ -27,7 +27,7 @@ public interface FormaPagamentoControllerOpenApi {
             @ApiResponse(responseCode = "404", description = "Forma de pagamento não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
     })
     public ResponseEntity<FormaPagamentoModel> buscar(
-            @ApiParam(value = "ID de uma forma de pagamento", example = "1")
+            @ApiParam(value = "ID de uma forma de pagamento", example = "1", required = true)
             Long formaPagamentoId,
 
             ServletWebRequest request
@@ -38,7 +38,7 @@ public interface FormaPagamentoControllerOpenApi {
             @ApiResponse(responseCode = "201", description = "Forma de pagamento cadastrada")
     })
     public FormaPagamentoModel adicionar(
-      @ApiParam(name = "corpo", value = "Representação de uma forma de pagamento")
+      @ApiParam(name = "corpo", value = "Representação de uma forma de pagamento", required = true)
       FormaPagamentoInput formaPagamentoInput
     );
 
@@ -48,10 +48,10 @@ public interface FormaPagamentoControllerOpenApi {
             @ApiResponse(responseCode = "404", description = "Forma de pagamento não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
     })
     public FormaPagamentoModel atualizar(
-            @ApiParam(value = "ID de uma forma de pagamento", example = "1")
+            @ApiParam(value = "ID de uma forma de pagamento", example = "1", required = true)
             Long formaPagamentoId,
 
-            @ApiParam(name = "corpo", value = "Representação de uma forma de pagamento com os novos dados")
+            @ApiParam(name = "corpo", value = "Representação de uma forma de pagamento com os novos dados", required = true)
             FormaPagamentoInput formaPagamentoInput
     );
 
@@ -61,7 +61,7 @@ public interface FormaPagamentoControllerOpenApi {
             @ApiResponse(responseCode = "404", description = "Forma de pagamento não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
     })
     public void remover(
-            @ApiParam(value = "ID de uma forma de pagamento", example = "1")
+            @ApiParam(value = "ID de uma forma de pagamento", example = "1", required = true)
             Long formaPagamentoId
     );
 
