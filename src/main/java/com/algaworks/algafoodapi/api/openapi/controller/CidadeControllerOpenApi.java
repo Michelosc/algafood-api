@@ -19,14 +19,14 @@ import java.util.List;
 public interface CidadeControllerOpenApi {
 
     @ApiOperation("Lista as cidades")
-    public List<CidadeModel> listar();
+    List<CidadeModel> listar();
 
     @ApiOperation("Busca uma cidade por ID")
     @ApiResponses({
             @ApiResponse(responseCode = "400", description = "ID de uma cidade", content = @Content(schema = @Schema(implementation = Problem.class))),
             @ApiResponse(responseCode = "404", description = "Cidade não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
     })
-    public CidadeModel buscar(
+    CidadeModel buscar(
             @ApiParam(value = "ID de uma cidade", example = "1", required = true)
             Long cidadeId);
 
@@ -36,7 +36,7 @@ public interface CidadeControllerOpenApi {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CidadeModel adicionar(
+    CidadeModel adicionar(
             @ApiParam(name = "corpo", value = "Representação de uma nova cidade", required = true)
             CidadeInput cidadeInput);
 
@@ -45,7 +45,7 @@ public interface CidadeControllerOpenApi {
             @ApiResponse(responseCode = "200", description = "Cidade atualizada"),
             @ApiResponse(responseCode = "404", description = "Cidade não encontrada", content = @Content(schema = @Schema(implementation = Problem.class)))
     })
-    public CidadeModel atualizar(
+    CidadeModel atualizar(
             @ApiParam(value = "ID de uma cidade", example = "1", required = true)
             Long cidadeId,
             @ApiParam(name = "corpo", value = "Representação de uma cidade com os novos dados", required = true)
@@ -58,7 +58,7 @@ public interface CidadeControllerOpenApi {
     })
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(
+    void remover(
             @ApiParam(value = "ID de uma cidade", example = "1", required = true)
             Long cidadeId);
 
