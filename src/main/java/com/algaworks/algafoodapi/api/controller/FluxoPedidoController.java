@@ -6,6 +6,7 @@ import com.algaworks.algafoodapi.api.assembler.PedidoResumoModelAssembler;
 import com.algaworks.algafoodapi.api.model.PedidoModel;
 import com.algaworks.algafoodapi.api.model.PedidoResumoModel;
 import com.algaworks.algafoodapi.api.model.input.PedidoInput;
+import com.algaworks.algafoodapi.api.openapi.controller.FluxoPedidoControllerOpenApi;
 import com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafoodapi.domain.exception.NegocioException;
 import com.algaworks.algafoodapi.domain.model.Pedido;
@@ -22,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pedidos/{codigoPedido}")
-public class FluxoPedidoController {
+public class FluxoPedidoController implements FluxoPedidoControllerOpenApi {
 
     @Autowired
     private FluxoPedidoService fluxoPedido;
