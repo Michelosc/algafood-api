@@ -3,6 +3,7 @@ package com.algaworks.algafoodapi.api.controller;
 import com.algaworks.algafoodapi.api.assembler.FotoProdutoModelAssembler;
 import com.algaworks.algafoodapi.api.model.FotoProdutoModel;
 import com.algaworks.algafoodapi.api.model.input.FotoProdutoInput;
+import com.algaworks.algafoodapi.api.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
 import com.algaworks.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafoodapi.domain.model.FotoProduto;
 import com.algaworks.algafoodapi.domain.model.Produto;
@@ -26,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteProdutoFotoController {
+public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
     @Autowired
     private CadastroProdutoService cadastroProdutoService;
@@ -46,7 +47,7 @@ public class RestauranteProdutoFotoController {
         return fotoProdutoModelAssembler.toModel(fotoProduto);
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.ALL_VALUE)
     public ResponseEntity<?> servirFoto(
             @PathVariable Long restauranteId, @PathVariable Long produtoId,
             @RequestHeader(name = "accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException{
