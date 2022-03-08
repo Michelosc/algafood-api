@@ -6,11 +6,13 @@ import com.algaworks.algafoodapi.api.model.UsuarioModel;
 import com.algaworks.algafoodapi.api.model.input.SenhaInput;
 import com.algaworks.algafoodapi.api.model.input.UsuarioComSenhaInput;
 import com.algaworks.algafoodapi.api.model.input.UsuarioInput;
+import com.algaworks.algafoodapi.api.openapi.controller.UsuarioControllerOpenApi;
 import com.algaworks.algafoodapi.domain.model.Usuario;
 import com.algaworks.algafoodapi.domain.repository.UsuarioRepository;
 import com.algaworks.algafoodapi.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerOpenApi {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -32,21 +34,21 @@ public class UsuarioController {
     @Autowired
     private UsuarioInputDisassembler usuarioInputDisassembler;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UsuarioModel> listar() {
         List<Usuario> usuarios = usuarioRepository.findAll();
 
         return usuarioModelAssembler.toCollectionModel(usuarios);
     }
 
-    @GetMapping("/{usuarioId}")
+    @GetMapping(path ="/{usuarioId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UsuarioModel buscar(@PathVariable Long usuarioId) {
         Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
 
         return usuarioModelAssembler.toModel(usuario);
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioModel adicionar(@RequestBody @Valid UsuarioComSenhaInput usuarioComSenhaInput) {
         Usuario usuario = usuarioInputDisassembler.toDomainObject(usuarioComSenhaInput);
@@ -55,7 +57,7 @@ public class UsuarioController {
         return usuarioModelAssembler.toModel(usuario);
     }
 
-    @PutMapping("/{usuarioId}")
+    @PutMapping(path = "/{usuarioId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UsuarioModel atualizar(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioInput usuarioInput) {
         Usuario usuarioAtual = cadastroUsuario.buscarOuFalhar(usuarioId);
         usuarioInputDisassembler.copyToDomainObject(usuarioInput, usuarioAtual);

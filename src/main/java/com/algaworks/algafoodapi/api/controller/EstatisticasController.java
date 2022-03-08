@@ -1,5 +1,6 @@
 package com.algaworks.algafoodapi.api.controller;
 
+import com.algaworks.algafoodapi.api.openapi.controller.EstatisticasControllerOpenApi;
 import com.algaworks.algafoodapi.domain.filter.VendaDiariaFilter;
 import com.algaworks.algafoodapi.domain.model.dto.VendaDiaria;
 import com.algaworks.algafoodapi.domain.service.VendaQueryService;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/estatisticas")
-public class EstatisticasController {
+public class EstatisticasController implements EstatisticasControllerOpenApi {
 
     @Autowired
     private VendaQueryService vendaQueryService;
