@@ -3,9 +3,9 @@ package com.algaworks.algafoodapi.api.controller;
 import com.algaworks.algafoodapi.api.ResourceUriHelper;
 import com.algaworks.algafoodapi.api.assembler.CidadeInputDisassembler;
 import com.algaworks.algafoodapi.api.assembler.CidadeModelAssembler;
-import com.algaworks.algafoodapi.api.openapi.controller.CidadeControllerOpenApi;
 import com.algaworks.algafoodapi.api.model.CidadeModel;
 import com.algaworks.algafoodapi.api.model.input.CidadeInput;
+import com.algaworks.algafoodapi.api.openapi.controller.CidadeControllerOpenApi;
 import com.algaworks.algafoodapi.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafoodapi.domain.exception.NegocioException;
 import com.algaworks.algafoodapi.domain.model.Cidade;
@@ -13,20 +13,12 @@ import com.algaworks.algafoodapi.domain.repository.CidadeRepository;
 import com.algaworks.algafoodapi.domain.service.CadastroCidadeService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.http.HttpHeaders;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.support.RequestContext;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @Api(tags = "Cidades")
@@ -61,9 +53,13 @@ public class CidadeController implements CidadeControllerOpenApi {
 
         CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
 
-        cidadeModel.add(Link.of("http://localhost:8080/cidades/1"));
-        cidadeModel.add(Link.of("http://localhost:8080/cidades", "cidades"));
-        cidadeModel.getEstado().add(Link.of("http://localhost:8080/estados/1"));
+        cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
+                .slash(cidadeModel.getId()).withSelfRel());
+
+        cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class).withRel("cidades"));
+
+        cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(EstadoController.class)
+                .slash(cidadeModel.getEstado().getId()).withSelfRel());
 
         return cidadeModel;
     }
