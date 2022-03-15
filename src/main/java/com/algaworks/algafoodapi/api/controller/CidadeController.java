@@ -13,6 +13,7 @@ import com.algaworks.algafoodapi.domain.repository.CidadeRepository;
 import com.algaworks.algafoodapi.domain.service.CadastroCidadeService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,7 +40,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     private CadastroCidadeService cadastroCidade;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<CidadeModel> listar() {
+    public CollectionModel<CidadeModel> listar() {
         List<Cidade> todasCidades = cidadeRepository.findAll();
 
         return cidadeModelAssembler.toCollectionModel(todasCidades);
@@ -51,21 +52,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 
         Cidade cidade = cadastroCidade.buscarOuFalhar(cidadeId);
 
-        CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
-
-        cidadeModel.add(WebMvcLinkBuilder.
-                linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
-                        .buscar(cidadeModel.getId())).withSelfRel());
-
-        cidadeModel.add(WebMvcLinkBuilder.
-                linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
-                        .listar()).withRel("cidades"));
-
-        cidadeModel.add(WebMvcLinkBuilder.
-                linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
-                        .buscar(cidadeModel.getEstado().getId())).withSelfRel());
-
-        return cidadeModel;
+        return cidadeModelAssembler.toModel(cidade);
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
