@@ -11,6 +11,7 @@ import com.algaworks.algafoodapi.domain.model.Usuario;
 import com.algaworks.algafoodapi.domain.repository.UsuarioRepository;
 import com.algaworks.algafoodapi.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     private UsuarioInputDisassembler usuarioInputDisassembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UsuarioModel> listar() {
+    public CollectionModel<UsuarioModel> listar() {
         List<Usuario> usuarios = usuarioRepository.findAll();
 
         return usuarioModelAssembler.toCollectionModel(usuarios);

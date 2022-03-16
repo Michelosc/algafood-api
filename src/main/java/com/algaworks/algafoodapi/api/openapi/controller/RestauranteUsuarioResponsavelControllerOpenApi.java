@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.hateoas.CollectionModel;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface RestauranteUsuarioResponsavelControllerOpenApi {
     @ApiResponses({
             @ApiResponse(responseCode = "404", description = "Restaurante não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
     })
-    List<UsuarioModel> listar(
+    CollectionModel<UsuarioModel> listar(
             @ApiParam(value = "ID do restaurante", example = "1", required = true)
             Long restauranteId
     );
