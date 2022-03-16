@@ -30,7 +30,7 @@ public class UsuarioModelAssembler extends RepresentationModelAssemblerSupport<U
         UsuarioModel usuarioModel = createModelWithId(usuario.getId(), usuario);
         modelMapper.map(usuario, usuarioModel);
 
-        usuarioModel.add(WebMvcLinkBuilder.linkTo(UsuarioModel.class).withRel("usuarios"));
+        usuarioModel.add(WebMvcLinkBuilder.linkTo(UsuarioController.class).withRel("usuarios"));
 
         usuarioModel.add(WebMvcLinkBuilder
                 .linkTo(WebMvcLinkBuilder
