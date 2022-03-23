@@ -14,7 +14,7 @@
 	<name>algafood-api</name>
 	<description>API de delivery de comida</description>
 	<properties>
-		<java.version>16</java.version>
+		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
