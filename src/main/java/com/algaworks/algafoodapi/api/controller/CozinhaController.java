@@ -46,7 +46,6 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
         PagedModel<CozinhaModel> cozinhaModelPagedModel = pagedResourcesAssembler
                 .toModel(cozinhasPage, cozinhaModelAssembler);
-        System.out.println(cozinhaModelPagedModel);
 
         return cozinhaModelPagedModel;
     }
