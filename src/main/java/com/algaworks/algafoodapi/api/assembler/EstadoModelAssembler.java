@@ -1,5 +1,6 @@
 package com.algaworks.algafoodapi.api.assembler;
 
+import com.algaworks.algafoodapi.api.AlgaLinks;
 import com.algaworks.algafoodapi.api.controller.EstadoController;
 import com.algaworks.algafoodapi.api.model.EstadoModel;
 import com.algaworks.algafoodapi.domain.model.Estado;
@@ -19,6 +20,9 @@ public class EstadoModelAssembler extends RepresentationModelAssemblerSupport<Es
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private AlgaLinks algaLinks;
+
     public EstadoModelAssembler() {
         super(EstadoController.class, EstadoModel.class);
     }
@@ -28,7 +32,7 @@ public class EstadoModelAssembler extends RepresentationModelAssemblerSupport<Es
         EstadoModel estadoModel = createModelWithId(estado.getId(), estado);
         modelMapper.map(estado, EstadoModel.class);
 
-        estadoModel.add(WebMvcLinkBuilder.linkTo(EstadoController.class).withRel("estados"));
+        estadoModel.add(algaLinks.linkToEstados("estados"));
 
         return estadoModel;
     }

@@ -1,5 +1,6 @@
 package com.algaworks.algafoodapi.api.controller;
 
+import com.algaworks.algafoodapi.api.AlgaLinks;
 import com.algaworks.algafoodapi.api.assembler.UsuarioModelAssembler;
 import com.algaworks.algafoodapi.api.model.UsuarioModel;
 import com.algaworks.algafoodapi.api.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
@@ -24,15 +25,16 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     @Autowired
     private UsuarioModelAssembler usuarioModelAssembler;
 
+    @Autowired
+    private AlgaLinks algaLinks;
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
         return usuarioModelAssembler.toCollectionModel(restaurante.getResponsaveis())
                 .removeLinks()
-                .add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
-                        .methodOn(RestauranteUsuarioResponsavelController.class)
-                        .listar(restauranteId)).withSelfRel());
+                .add(algaLinks.linkToResponsaveisRestaurante(restauranteId));
     }
 
     @DeleteMapping("/{usuarioId}")
