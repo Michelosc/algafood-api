@@ -5,6 +5,11 @@ import com.algaworks.algafoodapi.api.model.PedidoModel;
 import com.algaworks.algafoodapi.domain.model.Pedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.TemplateVariable;
+import org.springframework.hateoas.TemplateVariable.VariableType;
+import org.springframework.hateoas.TemplateVariables;
+import org.springframework.hateoas.UriTemplate;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
@@ -12,8 +17,12 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Component
-public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pedido, PedidoModel> {
+public class PedidoModelAssembler
+        extends RepresentationModelAssemblerSupport<Pedido, PedidoModel> {
 
     @Autowired
     private ModelMapper modelMapper;
@@ -25,33 +34,38 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
     @Override
     public PedidoModel toModel(Pedido pedido) {
         PedidoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
-        modelMapper.map(pedido, PedidoModel.class);
+        modelMapper.map(pedido, pedidoModel);
 
-        pedidoModel.add(WebMvcLinkBuilder.linkTo(PedidoController.class).withRel("pedidos"));
+        TemplateVariables pageVariables = new TemplateVariables(
+                new TemplateVariable("page", VariableType.REQUEST_PARAM),
+                new TemplateVariable("size", VariableType.REQUEST_PARAM),
+                new TemplateVariable("sort", VariableType.REQUEST_PARAM));
 
-        pedidoModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteController.class)
+        String pedidosUrl = linkTo(PedidoController.class).toUri().toString();
+
+        pedidoModel.add(Link.of(UriTemplate.of(pedidosUrl, pageVariables), "pedidos"));
+
+//		pedidoModel.add(linkTo(PedidoController.class).withRel("pedidos"));
+
+        pedidoModel.getRestaurante().add(linkTo(methodOn(RestauranteController.class)
                 .buscar(pedido.getRestaurante().getId())).withSelfRel());
 
-        pedidoModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioController.class)
+        pedidoModel.getCliente().add(linkTo(methodOn(UsuarioController.class)
                 .buscar(pedido.getCliente().getId())).withSelfRel());
-
-        pedidoModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FormaPagamentoController.class)
+        
+        pedidoModel.getFormaPagamento().add(linkTo(methodOn(FormaPagamentoController.class)
                 .buscar(pedido.getFormaPagamento().getId(), null)).withSelfRel());
 
-        pedidoModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
+        pedidoModel.getEnderecoEntrega().getCidade().add(linkTo(methodOn(CidadeController.class)
                 .buscar(pedido.getEnderecoEntrega().getCidade().getId())).withSelfRel());
 
         pedidoModel.getItens().forEach(item -> {
-            item.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteProdutoController.class)
-                    .buscar(pedidoModel.getRestaurante().getId(), item.getProdutoId())).withRel("produto"));
+            item.add(linkTo(methodOn(RestauranteProdutoController.class)
+                    .buscar(pedidoModel.getRestaurante().getId(), item.getProdutoId()))
+                    .withRel("produto"));
         });
 
         return pedidoModel;
     }
 
-    public List<PedidoModel> toCollectionModel(List<Pedido> pedidos) {
-        return pedidos.stream()
-                .map(this::toModel)
-                .collect(Collectors.toList());
-    }
 }
