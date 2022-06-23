@@ -9,9 +9,9 @@ import org.springframework.hateoas.server.core.Relation;
 import java.math.BigDecimal;
 
 @Relation(collectionRelation = "restaurantes")
-@Getter
 @Setter
-public class RestauranteModel extends RepresentationModel<RestauranteModel> {
+@Getter
+public class RestauranteBasicoModel extends RepresentationModel<RestauranteBasicoModel> {
 
     @ApiModelProperty(example = "1")
     private Long id;
@@ -23,9 +23,4 @@ public class RestauranteModel extends RepresentationModel<RestauranteModel> {
     private BigDecimal taxaFrete;
 
     private CozinhaModel cozinha;
-
-    private Boolean ativo;
-    private Boolean aberto;
-    private EnderecoModel endereco;
-
 }
