@@ -10,11 +10,9 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Component
-public class RestauranteModelAssembler extends RepresentationModelAssemblerSupport<Restaurante, RestauranteModel> {
+public class RestauranteModelAssembler
+        extends RepresentationModelAssemblerSupport<Restaurante, RestauranteModel> {
 
     @Autowired
     private ModelMapper modelMapper;
@@ -26,41 +24,52 @@ public class RestauranteModelAssembler extends RepresentationModelAssemblerSuppo
         super(RestauranteController.class, RestauranteModel.class);
     }
 
+    @Override
     public RestauranteModel toModel(Restaurante restaurante) {
         RestauranteModel restauranteModel = createModelWithId(restaurante.getId(), restaurante);
-        modelMapper.map(restaurante, RestauranteModel.class);
-
-        if(restaurante.ativacaoPermitida()) {
-            restauranteModel.add(algaLinks.linkToRestauranteAtivacao(restaurante.getId(), "ativar"));
-        }
-
-        if (restaurante.inativacaoPermitida()) {
-            restauranteModel.add(algaLinks.linkToRestauranteInativacao(restaurante.getId(), "inativar"));
-        }
-
-        if (restaurante.aberturaPermitida()) {
-            restauranteModel.add(algaLinks.linkToRestauranteAbertura(restaurante.getId(), "abrir"));
-        }
-
-        if (restaurante.fechamentoPermitido()) {
-            restauranteModel.add(algaLinks.linkToRestauranteFechamento(restaurante.getId(), "fechar"));
-        }
+        modelMapper.map(restaurante, restauranteModel);
 
         restauranteModel.add(algaLinks.linkToRestaurantes("restaurantes"));
 
-        restauranteModel.getCozinha().add(algaLinks.linkToCozinha(restaurante.getCozinha().getId()));
+        if (restaurante.ativacaoPermitida()) {
+            restauranteModel.add(
+                    algaLinks.linkToRestauranteAtivacao(restaurante.getId(), "ativar"));
+        }
 
-        restauranteModel.getEndereco().getCidade().add(algaLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
+        if (restaurante.inativacaoPermitida()) {
+            restauranteModel.add(
+                    algaLinks.linkToRestauranteInativacao(restaurante.getId(), "inativar"));
+        }
 
-        restauranteModel.add(algaLinks.linkToRestauranteFormasPagamento(restaurante.getId(), "formas-pagamento"));
+        if (restaurante.aberturaPermitida()) {
+            restauranteModel.add(
+                    algaLinks.linkToRestauranteAbertura(restaurante.getId(), "abrir"));
+        }
 
-        restauranteModel.add(algaLinks.linkToResponsaveisRestaurante(restaurante.getId(), "responsaveis"));
+        if (restaurante.fechamentoPermitido()) {
+            restauranteModel.add(
+                    algaLinks.linkToRestauranteFechamento(restaurante.getId(), "fechar"));
+        }
+
+        restauranteModel.getCozinha().add(
+                algaLinks.linkToCozinha(restaurante.getCozinha().getId()));
+
+        restauranteModel.getEndereco().getCidade().add(
+                algaLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
+
+        restauranteModel.add(algaLinks.linkToRestauranteFormasPagamento(restaurante.getId(),
+                "formas-pagamento"));
+
+        restauranteModel.add(algaLinks.linkToResponsaveisRestaurante(restaurante.getId(),
+                "responsaveis"));
 
         return restauranteModel;
     }
 
     @Override
     public CollectionModel<RestauranteModel> toCollectionModel(Iterable<? extends Restaurante> entities) {
-        return super.toCollectionModel(entities).add(algaLinks.linkToRestaurantes());
+        return super.toCollectionModel(entities)
+                .add(algaLinks.linkToRestaurantes());
     }
+
 }
