@@ -13,8 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(value = "/restaurantes/{restauranteId}/formas-pagamento")
 public class RestauranteFormaPagamentoController implements RestauranteFormaPagamentoControllerOpenApi {
@@ -35,7 +33,8 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
         CollectionModel<FormaPagamentoModel> formasPagamentoModel =
                 formaPagamentoModelAssembler.toCollectionModel(restaurante.getFormasPagamento())
                 .removeLinks()
-                .add(algaLinks.linkToRestauranteFormasPagamento(restauranteId));
+                .add(algaLinks.linkToRestauranteFormasPagamento(restauranteId))
+                        .add(algaLinks.linkToRestauranteFormaPagamentoAssociacao(restauranteId,"associar"));
 
         formasPagamentoModel.getContent().forEach(formaPagamentoModel -> {
             formaPagamentoModel
@@ -55,8 +54,9 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 
     @PutMapping(path = "/{formaPagamentoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void associar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
+    public ResponseEntity<Void> associar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
         cadastroRestaurante.associarFormaPagamento(restauranteId, formaPagamentoId);
+        return ResponseEntity.noContent().build();
     }
 
 }
