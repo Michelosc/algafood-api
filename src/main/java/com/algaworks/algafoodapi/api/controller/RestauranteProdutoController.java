@@ -1,5 +1,6 @@
 package com.algaworks.algafoodapi.api.controller;
 
+import com.algaworks.algafoodapi.api.AlgaLinks;
 import com.algaworks.algafoodapi.api.assembler.ProdutoInputDisassembler;
 import com.algaworks.algafoodapi.api.assembler.ProdutoModelAssembler;
 import com.algaworks.algafoodapi.api.model.ProdutoModel;
@@ -11,6 +12,7 @@ import com.algaworks.algafoodapi.domain.repository.ProdutoRepository;
 import com.algaworks.algafoodapi.domain.service.CadastroProdutoService;
 import com.algaworks.algafoodapi.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +39,12 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     @Autowired
     private ProdutoInputDisassembler produtoInputDisassembler;
 
+    @Autowired
+    private AlgaLinks algaLinks;
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ProdutoModel> listar(@PathVariable Long restauranteId,
-                                     @RequestParam(required = false) boolean incluirInativos) {
+    public CollectionModel<ProdutoModel> listar(@PathVariable Long restauranteId,
+                                                @RequestParam(required = false) Boolean incluirInativos) {
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
         List<Produto> todosProdutos = null;
@@ -50,9 +55,8 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
             todosProdutos = produtoRepository.findTodosByRestaurante(restaurante);
         }
 
-
-
-        return produtoModelAssembler.toCollectionModel(todosProdutos);
+        return produtoModelAssembler.toCollectionModel(todosProdutos)
+                .add(algaLinks.linkToProdutos(restauranteId));
     }
 
     @GetMapping(path = "/{produtoId}", produces = MediaType.APPLICATION_JSON_VALUE)
