@@ -132,6 +132,18 @@ public class AlgaLinks {
         return linkToGruposUsuario(usuarioId, IanaLinkRelations.SELF.value());
     }
 
+    public Link linkToGrupos(String rel) {
+        return linkTo(GrupoController.class).withRel(rel);
+    }
+
+    public Link linkToGrupos() {
+        return linkToGrupos(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToGrupoPermissoes(Long grupoId, String rel) {
+        return linkTo(methodOn(GrupoPermissaoController.class).listar(grupoId)).withRel(rel);
+    }
+
     public Link linkToResponsaveisRestaurante(Long restauranteId, String rel) {
         return linkTo(methodOn(RestauranteUsuarioResponsavelController.class)
                 .listar(restauranteId)).withRel(rel);
@@ -217,5 +229,13 @@ public class AlgaLinks {
 
     public Link linkToCozinhas() {
         return linkToCozinhas(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToFotoProduto(Long restauranteId, Long produtoId, String rel) {
+        return linkTo(methodOn(RestauranteProdutoFotoController.class).buscar(restauranteId, produtoId)).withRel(rel);
+    }
+
+    public Link linkToFotoProduto(Long restauranteId, Long produtoId) {
+        return linkToFotoProduto(restauranteId, produtoId, IanaLinkRelations.SELF.value());
     }
 }

@@ -6,6 +6,7 @@ import com.algaworks.algafoodapi.api.openapi.controller.UsuarioGrupoControllerOp
 import com.algaworks.algafoodapi.domain.model.Usuario;
 import com.algaworks.algafoodapi.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +24,9 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
     private GrupoModelAssembler grupoModelAssembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<GrupoModel> listar(@PathVariable Long usuarioId) {
+    public CollectionModel<GrupoModel> listar(@PathVariable Long usuarioId) {
         Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
-        return grupoModelAssembler.toCollectionModel(usuario.getGrupos());
+        return grupoModelAssembler.toCollectionModel(usuario.getGrupos()).removeLinks();
     }
 
     @DeleteMapping(path ="/{grupoId}", produces = MediaType.APPLICATION_JSON_VALUE)
