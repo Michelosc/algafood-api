@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public interface UsuarioGrupoControllerOpenApi {
             @ApiResponse(responseCode = "204", description = "Desassociação realizada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Usuário ou grupo não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
     })
-    void desassociar(
+    ResponseEntity<Void> desassociar(
             @ApiParam(value = "ID do usuário", example = "1", required = true)
             Long usuarioId,
 
@@ -43,7 +44,7 @@ public interface UsuarioGrupoControllerOpenApi {
             @ApiResponse(responseCode = "204", description = "Associação realizada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Usuário ou grupo não encontrado", content = @Content(schema = @Schema(implementation = Problem.class)))
     })
-    void associar(
+    ResponseEntity<Void> associar(
             @ApiParam(value = "ID do usuário", example = "1", required = true)
                     Long usuarioId,
 
