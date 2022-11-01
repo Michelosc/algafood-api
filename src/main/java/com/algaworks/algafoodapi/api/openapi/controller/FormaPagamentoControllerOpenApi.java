@@ -3,6 +3,7 @@ package com.algaworks.algafoodapi.api.openapi.controller;
 import com.algaworks.algafoodapi.api.exceptionhandler.Problem;
 import com.algaworks.algafoodapi.api.model.FormaPagamentoModel;
 import com.algaworks.algafoodapi.api.model.input.FormaPagamentoInput;
+import com.algaworks.algafoodapi.api.openapi.model.FormasPagamentoModelOpenApi;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -19,7 +20,7 @@ import java.util.List;
 @Api(tags = "Formas de pagamento")
 public interface FormaPagamentoControllerOpenApi {
 
-    @ApiOperation("Lista as formas de pagamento")
+    @ApiOperation(value = "Lista as formas de pagamento", response = FormasPagamentoModelOpenApi.class)
     ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(ServletWebRequest request);
 
     @ApiOperation("Busca uma forma de pagamento por ID")
