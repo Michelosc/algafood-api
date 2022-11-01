@@ -43,7 +43,8 @@ public class EstadoController implements EstadoControllerOpenApi {
     @GetMapping
     public CollectionModel<EstadoModel> listar() {
         List<Estado> todosEstados = estadoRepository.findAll();
-        return estadoModelAssembler.toCollectionModel(todosEstados);
+        var estados = estadoModelAssembler.toCollectionModel(todosEstados);
+        return estados;
     }
 
     @GetMapping(path = "/{estadoId}", produces = MediaType.APPLICATION_JSON_VALUE)
