@@ -30,7 +30,7 @@ public class GrupoModelAssembler
 
     public GrupoModel toModel(Grupo grupo) {
         GrupoModel grupoModel = createModelWithId(grupo.getId(), grupo);
-        modelMapper.map(grupo, GrupoModel.class);
+        modelMapper.map(grupo, grupoModel);
 
         grupoModel.add(algaLinks.linkToGrupos("grupos"));
 
