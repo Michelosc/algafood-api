@@ -68,6 +68,10 @@ public class SpringFoxConfig {
                         PedidosResumoModelOpenApi.class
                 ))
                 .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, ProdutoModel.class),
+                        ProdutosModelOpenApi.class
+                ))
+                .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, CidadeModel.class),
                         CidadesModelOpenApi.class
                 ))
