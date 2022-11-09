@@ -1,6 +1,6 @@
 package com.algaworks.algafoodapi.api;
 
-import com.algaworks.algafoodapi.api.controller.*;
+import com.algaworks.algafoodapi.api.v1.controller.*;
 import org.springframework.hateoas.*;
 import org.springframework.stereotype.Component;
 
