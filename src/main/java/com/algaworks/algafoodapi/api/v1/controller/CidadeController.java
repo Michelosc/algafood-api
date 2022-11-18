@@ -6,7 +6,6 @@ import com.algaworks.algafoodapi.api.v1.assembler.CidadeModelAssembler;
 import com.algaworks.algafoodapi.api.v1.model.CidadeModel;
 import com.algaworks.algafoodapi.api.v1.model.input.CidadeInput;
 import com.algaworks.algafoodapi.api.v1.openapi.controller.CidadeControllerOpenApi;
-import com.algaworks.algafoodapi.core.web.AlgaMediaTypes;
 import com.algaworks.algafoodapi.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafoodapi.domain.exception.NegocioException;
 import com.algaworks.algafoodapi.domain.model.Cidade;
@@ -24,7 +23,7 @@ import java.util.List;
 
 @Api(tags = "Cidades")
 @RestController
-@RequestMapping(value = "/cidades", produces = AlgaMediaTypes.V1_APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeController implements CidadeControllerOpenApi {
 
     @Autowired
@@ -39,14 +38,14 @@ public class CidadeController implements CidadeControllerOpenApi {
     @Autowired
     private CadastroCidadeService cadastroCidade;
 
-    @GetMapping(produces = AlgaMediaTypes.V1_APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<CidadeModel> listar() {
         List<Cidade> todasCidades = cidadeRepository.findAll();
 
         return cidadeModelAssembler.toCollectionModel(todasCidades);
     }
 
-    @GetMapping(path ="/{cidadeId}", produces = AlgaMediaTypes.V1_APPLICATION_JSON_VALUE)
+    @GetMapping(path ="/{cidadeId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModel buscar(
             @PathVariable Long cidadeId) {
 
@@ -55,7 +54,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         return cidadeModelAssembler.toModel(cidade);
     }
 
-    @PostMapping(produces = AlgaMediaTypes.V1_APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeModel adicionar(
             @RequestBody @Valid CidadeInput cidadeInput) {
@@ -71,7 +70,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
-    @PutMapping(path ="/{cidadeId}", produces = AlgaMediaTypes.V1_APPLICATION_JSON_VALUE)
+    @PutMapping(path ="/{cidadeId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModel atualizar(
             @PathVariable Long cidadeId,
             @RequestBody @Valid CidadeInput cidadeInput) {

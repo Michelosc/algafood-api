@@ -1,16 +1,10 @@
 package com.algaworks.algafoodapi.api.v2.controller;
 
 import com.algaworks.algafoodapi.api.ResourceUriHelper;
-import com.algaworks.algafoodapi.api.v1.assembler.CidadeInputDisassembler;
-import com.algaworks.algafoodapi.api.v1.assembler.CidadeModelAssembler;
-import com.algaworks.algafoodapi.api.v1.model.CidadeModel;
-import com.algaworks.algafoodapi.api.v1.model.input.CidadeInput;
-import com.algaworks.algafoodapi.api.v1.openapi.controller.CidadeControllerOpenApi;
 import com.algaworks.algafoodapi.api.v2.assembler.CidadeInputDisassemblerV2;
 import com.algaworks.algafoodapi.api.v2.assembler.CidadeModelAssemblerV2;
 import com.algaworks.algafoodapi.api.v2.model.CidadeModelV2;
 import com.algaworks.algafoodapi.api.v2.model.input.CidadeInputV2;
-import com.algaworks.algafoodapi.core.web.AlgaMediaTypes;
 import com.algaworks.algafoodapi.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafoodapi.domain.exception.NegocioException;
 import com.algaworks.algafoodapi.domain.model.Cidade;
@@ -20,6 +14,7 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,7 +22,7 @@ import java.util.List;
 
 @Api(tags = "Cidades")
 @RestController
-@RequestMapping(value = "/cidades", produces = AlgaMediaTypes.V2_APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v2/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeControllerV2 {
 
     @Autowired
@@ -42,14 +37,14 @@ public class CidadeControllerV2 {
     @Autowired
     private CadastroCidadeService cadastroCidade;
 
-    @GetMapping(produces = AlgaMediaTypes.V2_APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<CidadeModelV2> listar() {
         List<Cidade> todasCidades = cidadeRepository.findAll();
 
         return cidadeModelAssembler.toCollectionModel(todasCidades);
     }
 
-    @GetMapping(path ="/{cidadeId}", produces = AlgaMediaTypes.V2_APPLICATION_JSON_VALUE)
+    @GetMapping(path ="/{cidadeId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModelV2 buscar(
             @PathVariable Long cidadeId) {
 
@@ -58,7 +53,7 @@ public class CidadeControllerV2 {
         return cidadeModelAssembler.toModel(cidade);
     }
 
-    @PostMapping(produces = AlgaMediaTypes.V2_APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeModelV2 adicionar(
             @RequestBody @Valid CidadeInputV2 cidadeInput) {
@@ -74,7 +69,7 @@ public class CidadeControllerV2 {
         }
     }
 
-    @PutMapping(path ="/{cidadeId}", produces = AlgaMediaTypes.V2_APPLICATION_JSON_VALUE)
+    @PutMapping(path ="/{cidadeId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModelV2 atualizar(
             @PathVariable Long cidadeId,
             @RequestBody @Valid CidadeInputV2 cidadeInput) {
