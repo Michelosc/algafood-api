@@ -22,7 +22,7 @@ import javax.validation.Valid;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @RestController
-@RequestMapping("/cozinhas")
+@RequestMapping("/v1/cozinhas")
 public class CozinhaController implements CozinhaControllerOpenApi {
 
     @Autowired
