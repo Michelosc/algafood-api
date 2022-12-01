@@ -3,6 +3,10 @@ package com.algaworks.algafoodapi.core.openapi;
 import com.algaworks.algafoodapi.api.exceptionhandler.Problem;
 import com.algaworks.algafoodapi.api.v1.model.*;
 import com.algaworks.algafoodapi.api.v1.openapi.model.*;
+import com.algaworks.algafoodapi.api.v2.model.CidadeModelV2;
+import com.algaworks.algafoodapi.api.v2.model.CozinhaModelV2;
+import com.algaworks.algafoodapi.api.v2.openapi.model.CidadesModelV2OpenApi;
+import com.algaworks.algafoodapi.api.v2.openapi.model.CozinhasModelV2OpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
@@ -86,7 +90,15 @@ public class SpringFoxConfig {
                         InputStream.class)
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
                 .directModelSubstitute(Links.class, LinksModelOpenApi.class)
-                .apiInfo(apiInfoV2());
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(PagedModel.class, CozinhaModelV2.class),
+                        CozinhasModelV2OpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, CidadeModelV2.class),
+                        CidadesModelV2OpenApi.class))
+                .apiInfo(apiInfoV2())
+                .tags(new Tag("Cidades", "Gerencia as cidades"),
+                        new Tag("Cozinhas", "Gerencia as cozinhas"));
     }
 
     private List<Response> globalPostPutResponseMessages() {
