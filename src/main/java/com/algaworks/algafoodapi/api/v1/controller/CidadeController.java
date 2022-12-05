@@ -38,6 +38,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     @Autowired
     private CadastroCidadeService cadastroCidade;
 
+    @Deprecated
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<CidadeModel> listar() {
         List<Cidade> todasCidades = cidadeRepository.findAll();
